@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: techwave-app
+  labels:
+    app: techwave
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: techwave
+  template:
+    metadata:
+      labels:
+        app: techwave
+    spec:
+      containers:
+      - name: flask-app
+        image: tu-usuario-docker/proyecto-final:latest # Cambiaremos esto en el CI/CD
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: APP_VERSION
+          value: "1.0.0-prod"

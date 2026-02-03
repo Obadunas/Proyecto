@@ -1,0 +1,35 @@
+name: CI/CD Pipeline TechWave
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout código
+        [cite_start]uses: actions/checkout@v3 [cite: 50]
+
+      - name: Gitleaks Scan (Seguridad)
+        [cite_start]uses: gitleaks/gitleaks-action@v2 [cite: 55]
+
+      - name: Build Docker Image
+        [cite_start]run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest . [cite: 52]
+
+      - name: Trivy Scan (Seguridad de Imagen)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest'
+          format: 'table'
+          exit-code: '1'
+          [cite_start]severity: 'CRITICAL,HIGH' [cite: 55]
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push to Docker Hub
+        [cite_start]run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest [cite: 53]
