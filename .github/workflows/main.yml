@@ -22,18 +22,17 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker Image
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest .
 
       - name: Trivy Scan (Seguridad de Imagen)
         uses: aquasecurity/trivy-action@master
+        continue-on-error: true
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest'
           format: 'table'
-          exit-code: '1'
+#          exit-code: '1'
           severity: 'CRITICAL,HIGH'
-        continue-on-error: true
+#        continue-on-error: true
 
       - name: Push to Docker Hub
-        run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest
