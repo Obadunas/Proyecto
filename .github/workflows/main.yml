@@ -35,4 +35,6 @@ jobs:
 #        continue-on-error: true
 
       - name: Push to Docker Hub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest
+        run: |
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest
