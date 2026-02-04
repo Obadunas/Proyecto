@@ -30,11 +30,7 @@ jobs:
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest'
           format: 'table'
-#          exit-code: '1'
           severity: 'CRITICAL,HIGH'
-#        continue-on-error: true
 
       - name: Push to Docker Hub
-        run: |
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/techwave-app:latest
